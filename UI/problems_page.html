@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems - Reverse OJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-gray-800">Reverse OJ</a>
+                </div>
+                <div class="hidden sm:flex sm:items-center">
+                    <a href="index.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="contests.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Contests</a>
+                    <a href="problems_page.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Problems</a>
+                    <a href="blogs.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Blogs</a>
+                    <a href="leaderboard.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Leaderboard</a>
+                    <a href="login.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--HEADER-->
+    <header class="bg-blue-500 text-white py-12">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl font-bold">Problems</h1>
+            <p class="mt-4 text-lg">Choose a problem to test your coding skills.</p>
+        </div>
+    </header>
+
+    <!-- Problems Section with Search -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4">
+            
+            <!-- Search Bar -->
+            <div class="mb-4">
+                <input type="text" id="searchBar" placeholder="Search problems..." class="border p-2 w-full rounded" onkeyup="searchProblems()">
+            </div>
+
+            <!-- Problems Table -->
+            <div class="bg-white shadow-md rounded-lg">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-sm uppercase font-bold text-gray-700 tracking-wider">
+                                <th class="px-6 py-4">Problem</th>
+                                <th class="px-6 py-4">Rating</th>
+                                <th class="px-6 py-4">Attempts</th>
+                                <th class="px-6 py-4">Solve</th>
+                            </tr>
+                        </thead>
+                        <tbody id="problemList" class="text-gray-700">
+                            <!-- Problem 1 -->
+                            <tr class="border-t border-gray-300">
+                                <td class="px-6 py-4">
+                                    <a href="submission.html" class="text-blue-500 font-semibold hover:underline">Sum of Two Integers</a>
+                                </td>
+                                <td class="px-6 py-4"> 800 </td>
+                                <td class="px-6 py-4"> 1234 </td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-500 hover:underline">Solve</a>
+                                </td>
+                            </tr>
+
+                            <!-- Problem 2 -->
+                            <tr class="border-t border-gray-300">
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-500 font-semibold hover:underline">Find the Longest Path</a>
+                                </td>
+                                <td class="px-6 py-4">1100</td>
+                                <td class="px-6 py-4">875</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-500 hover:underline">Solve</a>
+                                </td>
+                            </tr>
+
+                            <!-- Problem 3 -->
+                            <tr class="border-t border-gray-300">
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-500 font-semibold hover:underline">Maximum Subarray Sum</a>
+                                </td>
+                                <td class="px-6 py-4">1500</td>
+                                <td class="px-6 py-4">523</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-500 hover:underline">Solve</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Reverse OJ. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

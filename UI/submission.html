@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Solution - Sum of Two Integers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-gray-800">Reverse OJ</a>
+                </div>
+                <div class="hidden sm:flex sm:items-center">
+                    <a href="index.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="contests.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Contests</a>
+                    <a href="problems_page.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Problems</a>
+                    <a href="blogs.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Blogs</a>
+                    <a href="leaderboard.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Leaderboard</a>
+                    <a href="login.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Problem Title -->
+    <header class="bg-blue-500 text-white py-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-3xl">Sum of Two Integers</h1>
+        </div>
+    </header>
+
+    <!-- Problem Statement -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-xl mb-4">Problem Statement</h2>
+            <p class="mb-4">You are given two integers <code>a</code> and <code>b</code>. Return the sum of these two integers.</p>
+
+            <h3 class="mb-2"><strong>Input:</strong></h3>
+            <p>Two integers <code>a</code> and <code>b</code>, separated by space.</p>
+
+            <h3 class="mt-4 mb-2"><strong>Output:</strong></h3>
+            <p>A single integer, the sum of <code>a</code> and <code>b</code>.</p>
+
+            <h3 class="mt-4 mb-2"><strong>Example:</strong></h3>
+            <pre class="bg-gray-100 p-2 rounded">Input: 3 5
+Output: 8</pre>
+        </div>
+    </section>
+
+    <!-- Submission Form -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-xl mb-4">Submit Your Solution</h2>
+
+            <form action="/submit" method="POST" class="space-y-4">
+                <!-- Language Selection -->
+                <div>
+                    <label for="language" class="block">Choose Language:</label>
+                    <select id="language" name="language" class="border rounded p-2 w-full">
+                        <option value="cpp">C++</option>
+                        <option value="java">Java</option>
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                    </select>
+                </div>
+
+                <!-- Code Textarea -->
+                <div>
+                    <label for="code" class="block">Your Code:</label>
+                    <textarea id="code" name="code" rows="10" class="border rounded p-2 w-full" placeholder="Write your code here..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <footer class="bg-gray-800 text-white py-4"></footer>
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Reverse OJ. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

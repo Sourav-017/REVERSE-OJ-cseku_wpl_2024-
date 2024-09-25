@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Reverse OJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-gray-800">Reverse OJ</a>
+                </div>
+                <div class="hidden sm:flex sm:items-center">
+                    <a href="index.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="contests.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Contests</a>
+                    <a href="problems_page.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Problems</a>
+                    <a href="blogs.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Blogs</a>
+                    <a href="leaderboard.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Leaderboard</a>
+                    <a href="login.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!--HEADER-->
+    <header class="bg-blue-500 text-white py-12">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl font-bold">Login</h1>
+            <p class="mt-4 text-lg">Access your account to continue.</p>
+        </div>
+    </header>
+
+    <!-- Login Form -->
+    <section class="py-12">
+        <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-8">
+            <form action="#" method="POST">
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" required class="mt-1 border border-gray-300 rounded-md p-2 w-full" placeholder="Enter your username">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" required class="mt-1 border border-gray-300 rounded-md p-2 w-full" placeholder="Enter your password">
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 rounded-md">Login</button>
+            </form>
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Don't have an account? <a href="#" class="text-blue-500 hover:underline">Sign up</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Reverse OJ. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

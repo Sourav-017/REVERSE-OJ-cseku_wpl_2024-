@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs - Reverse OJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-gray-800">Reverse OJ</a>
+                </div>
+                <div class="hidden sm:flex sm:items-center">
+                    <a href="index.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="contests.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Contests</a>
+                    <a href="problems_page.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Problems</a>
+                    <a href="blogs.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Blogs</a>
+                    <a href="leaderboard.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Leaderboard</a>
+                    <a href="login.html" class="text-gray-800 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Page Header -->
+    <header class="bg-blue-500 text-white py-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-3xl">Blogs</h1>
+        </div>
+    </header>
+
+    <!-- Blog Search and List Section -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4">
+
+            <!-- Search Bar -->
+            <div class="mb-8">
+                <input type="text" id="searchBar" placeholder="Search blogs..." class="border p-2 w-full rounded" onkeyup="searchBlogs()">
+            </div>
+
+            <!-- Blog List -->
+            <div id="blogList" class="space-y-4">
+                <!-- Blog 1 -->
+                <div class="bg-white p-4 shadow-sm rounded border">
+                    <h3 class="text-lg font-semibold">Introduction to Dynamic Programming</h3>
+                    <p class="text-gray-600 mb-2">Learn the fundamentals of dynamic programming with practical examples.</p>
+                    <a href="#" class="text-blue-500 hover:underline">Read More</a>
+                </div>
+
+                <!-- Blog 2 -->
+                <div class="bg-white p-4 shadow-sm rounded border">
+                    <h3 class="text-lg font-semibold">Tips for Competitive Coding</h3>
+                    <p class="text-gray-600 mb-2">Top strategies to improve your coding skills in contests.</p>
+                    <a href="#" class="text-blue-500 hover:underline">Read More</a>
+                </div>
+
+                <!-- Blog 3 -->
+                <div class="bg-white p-4 shadow-sm rounded border">
+                    <h3 class="text-lg font-semibold">Understanding Graph Algorithms</h3>
+                    <p class="text-gray-600 mb-2">A deep dive into essential graph algorithms used in competitive programming.</p>
+                    <a href="#" class="text-blue-500 hover:underline">Read More</a>
+                </div>
+
+                <!-- Blog 4 -->
+                <div class="bg-white p-4 shadow-sm rounded border">
+                    <h3 class="text-lg font-semibold">Exploring Binary Search Trees</h3>
+                    <p class="text-gray-600 mb-2">An overview of BSTs and their applications in problem-solving.</p>
+                    <a href="#" class="text-blue-500 hover:underline">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-4"></footer>
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Reverse OJ. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
