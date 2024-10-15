@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User List</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+      <h1 class="text-3xl font-bold mb-5">User List</h1>
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="py-2 px-4 border-b text-left">Name</th>
+            <th class="py-2 px-4 border-b text-left">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (users.length > 0) { %>
+          <!-- Check if users exist -->
+          <% users.forEach(user => { %>
+          <tr class="hover:bg-gray-100">
+            <td class="py-2 px-4 border-b"><%= user.Name %></td>
+            <td class="py-2 px-4 border-b"><%= user.Email %></td>
+          </tr>
+          <% }); %> <% } else { %>
+          <tr>
+            <td colspan="2" class="py-2 px-4 border-b text-center">
+              No users found
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
