@@ -1,0 +1,42 @@
+<!-- views/ProblemList.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Problems List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+      <h1 class="text-3xl font-bold text-center mb-5">Problems List</h1>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr
+              class="w-full bg-gray-200 text-gray-600 uppercase text-sm leading-normal"
+            >
+              <th class="py-3 px-6 text-left">Problem Name</th>
+              <th class="py-3 px-6 text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-600 text-sm font-light">
+            <% problems.forEach(problem => { %>
+            <tr class="border-b border-gray-200 hover:bg-gray-100">
+              <td class="py-3 px-6"><%= problem.name %></td>
+              <td class="py-3 px-6">
+                <a
+                  href="/problems/problem/<%= problem.id %>"
+                  class="text-blue-500 hover:underline"
+                  >View Problem Statement</a
+                >
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
