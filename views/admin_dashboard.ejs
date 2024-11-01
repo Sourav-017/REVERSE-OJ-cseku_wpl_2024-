@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <!-- Sidebar -->
+  <div class="flex">
+    <div class="w-64 bg-gray-800 text-white h-screen p-4">
+      <h2 class="text-2xl font-semibold mb-6">Admin Dashboard</h2>
+      <ul class="space-y-4">
+        <li><a href="/admin/users" class="block px-4 py-2 rounded hover:bg-gray-700">User Management</a></li>
+        <li><a href="/admin/contests" class="block px-4 py-2 rounded hover:bg-gray-700">Contest Management</a></li>
+        <li><a href="/setproblem" class="block px-4 py-2 rounded hover:bg-gray-700">Problem Management</a></li>
+        <li><a href="/setproblem" class="block px-4 py-2 rounded hover:bg-gray-700">Add Problem</a></li>
+        <li><a href="/login/logout" class="block px-4 py-2 rounded hover:bg-gray-700">Log Out</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+      <h1 class="text-3xl font-semibold text-gray-800 mb-4">Admin Dashboard</h1>
+      
+      <!-- Section: Quick Stats -->
+      <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Total Users</h3>
+          <p class="text-2xl font-bold">1200</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Total Contests</h3>
+          <p class="text-2xl font-bold">24</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Total Problems</h3>
+          <p class="text-2xl font-bold">500</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold text-gray-700">Recent Submissions</h3>
+          <p class="text-2xl font-bold">3,250</p>
+        </div>
+      </div>
+
+      <!-- Section: User Management -->
+      <div id="user-management" class="bg-white p-6 rounded shadow mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">User Management</h2>
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="p-2 text-left">Username</th>
+              <th class="p-2 text-left">Role</th>
+              <th class="p-2 text-left">Status</th>
+              <th class="p-2 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-2">john_doe</td>
+              <td class="p-2">User</td>
+              <td class="p-2 text-green-600">Active</td>
+              <td class="p-2">
+                <button class="px-3 py-1 text-white bg-blue-500 rounded">Edit</button>
+                <button class="px-3 py-1 text-white bg-red-500 rounded">Ban</button>
+              </td>
+            </tr>
+            <!-- Additional rows for other users -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section: Contest Management

@@ -1,7 +1,7 @@
 // In your routes/users.js
 var express = require("express");
 var router = express.Router();
-const db = require("../db"); // Import the MySQL connection
+const db = require("../db"); 
 
 // Route to get all users
 router.get("/", (req, res) => {
@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
     if (err) {
       return res.status(500).send("Error fetching users");
     }
-    res.render("users", { users: results }); // Send the fetched users as JSON
+    res.render("users", { users: results }); 
     // console.log(results);
   });
 });
