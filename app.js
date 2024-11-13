@@ -3,7 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const multer = require("multer"); // Import multer
+const multer = require("multer");
 
 const db = require("./db");
 
@@ -11,11 +11,10 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var problemsRouter = require("./routes/problems");
 var setProblemRouter = require("./routes/setProblem");
-var blogRouter = require("./routes/blogs");
-
+var loginRouter = require("./routes/login"); 
+var signupRouter = require("./routes/signup"); 
 var app = express();
 
-// Set up storage for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     if (file.fieldname === "problemStatement") {
@@ -31,7 +30,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// Multer middleware for file uploads
 const upload = multer({ storage });
 
 app.set("views", path.join(__dirname, "views"));
@@ -40,7 +38,6 @@ app.set("view engine", "ejs");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public"));
 
 app.use(express.urlencoded({ extended: true }));
@@ -49,9 +46,10 @@ app.use(express.static(path.join(__dirname, "files")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/problems", problemsRouter);
-app.use("/blogs", blogRouter);
+app.use("/login", loginRouter);
+app.use("/signup", signupRouter);
 
-// Pass multer to the setProblemRouter
+
 app.use(
   "/setProblem",
   upload.fields([
