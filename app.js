@@ -13,6 +13,10 @@ var problemsRouter = require("./routes/problems");
 var setProblemRouter = require("./routes/setProblem");
 var loginRouter = require("./routes/login"); 
 var signupRouter = require("./routes/signup"); 
+var adminRouter = require("./routes/admin"); // Import the admin router
+
+
+
 var app = express();
 
 const storage = multer.diskStorage({
@@ -48,6 +52,7 @@ app.use("/users", usersRouter);
 app.use("/problems", problemsRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
+app.use("/admin", adminRouter); // Use the admin route
 
 
 app.use(
