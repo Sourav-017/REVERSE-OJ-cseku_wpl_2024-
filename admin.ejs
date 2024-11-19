@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - User List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <!-- Header Section -->
+  <header class="bg-blue-600 text-white py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Admin Panel</h1>
+      <nav class="space-x-4">
+        <a href="/" class="text-white hover:text-blue-200">Home</a>
+        <a href="/admin/user-list" class="text-white hover:text-blue-200">Refresh</a>
+        <a href="/logout" class="text-white hover:text-blue-200">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <main class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold mb-6">Registered Users</h2>
+
+    <!-- User List Table -->
+    <div class="bg-white rounded shadow-md overflow-hidden">
+      <table class="table-auto w-full border-collapse border border-gray-200">
+        <thead class="bg-gray-200 text-gray-700">
+          <tr>
+            <th class="py-2 px-4 border-b border-gray-300 text-left">ID</th>
+            <th class="py-2 px-4 border-b border-gray-300 text-left">Name</th>
+            <th class="py-2 px-4 border-b border-gray-300 text-left">Email</th>
+            <th class="py-2 px-4 border-b border-gray-300 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (users.length > 0) { %>
+            <% users.forEach(user => { %>
+              <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b border-gray-200"><%= user.id %></td>
+                <td class="py-2 px-4 border-b border-gray-200">
+                  <form action="/admin/update-user/<%= user.id %>" method="POST">
+                    <input 
+                      type="text" 
+                      name="name" 
+                      value="<%= user.name %>" 
+                      class="border border-gray-300 rounded px-2 py-1 w-full" 
+                      required />
+                </td>
+                <td class="py-2 px-4 border-b border-gray-200">
+                    <input 
+                      type="email" 
+                      name="email" 
+                      value="<%= user.email %>" 
+                      class="border border-gray-300 rounded px-2 py-1 w-full" 
+                      required />
+                </td>
+                <td class="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                  <button 
+                    type="submit" 
+                    class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600">
+                    Update
+                  </button>
+                  </form>
+                  <form action="/admin/delete-user/<%= user.id %>" method="POST">
+                    <button 
+                      type="submit" 
+                      class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="4" class="py-4 text-center text-gray-500">No users found.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>
