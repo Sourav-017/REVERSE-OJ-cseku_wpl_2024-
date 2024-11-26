@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Problem Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+      <h2 class="text-3xl font-bold mb-6">Problem Management</h2>
+      <!-- Problem List Table -->
+      <div class="bg-white rounded shadow-md overflow-hidden">
+        <table class="table-auto w-full border-collapse border border-gray-200">
+          <thead class="bg-gray-200 text-gray-700">
+            <tr>
+              <th class="py-2 px-4 border-b border-gray-300 text-left">ID</th>
+              <th class="py-2 px-4 border-b border-gray-300 text-left">
+                Title
+              </th>
+              <th class="py-2 px-4 border-b border-gray-300 text-left">
+                Description
+              </th>
+              <th class="py-2 px-4 border-b border-gray-300 text-left">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (problems.length > 0) { %> <% problems.forEach(problem => { %>
+            <tr class="hover:bg-gray-100">
+              <td class="py-2 px-4 border-b border-gray-200">
+                <%= problem.id %>
+              </td>
+              <td class="py-2 px-4 border-b border-gray-200">
+                <%= problem.name %>
+              </td>
+              <td class="py-2 px-4 border-b border-gray-200">
+                <%= problem.problemD %>
+              </td>
+              <td class="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                <form
+                  action="/admin/delete-problem/<%= problem.id %>"
+                  method="POST"
+                >
+                  <button
+                    type="submit"
+                    class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            <% }); %> <% } else { %>
+            <tr>
+              <td colspan="4" class="py-4 text-center text-gray-500">
+                No problems found.
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

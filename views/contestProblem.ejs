@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Problem Statement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <%- include('./dashboard') %>
+    <div class="container mx-auto mt-10">
+      <h1 class="text-3xl font-bold text-center mb-5"><%= problem.name %></h1>
+
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold mb-2">Problem Statement (PDF)</h2>
+        <% if (pdfBuffer) { %>
+        <iframe
+          src="data:application/pdf;base64,<%= pdfBuffer.toString('base64') %>"
+          class="w-full h-[900px] border-2 border-green-300"
+          frameborder="0"
+          title="Problem PDF"
+        ></iframe>
+        <% } else { %>
+        <p class="text-red-500">No PDF available for this problem.</p>
+        <% } %>
+      </div>
+
+      <% if (typeof result !== 'undefined') { %>
+      <div
+        class="bg-blue-100 text-blue-800 font-semibold text-center p-4 rounded-md mb-4"
+      >
+        <%= result %>
+      </div>
+      <% } %>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">Submission</h2>
+        <form
+          action="/contests/contestSubmission/<%= contestId %>/problems/<%= problem.id %>/submit"
+          method="POST"
+        >
+          <!-- Language selection dropdown -->
+          <label for="language" class="block mb-2">Choose Language:</label>
+          <select
+            name="language"
+            id="language"
+            class="mb-4 border border-gray-300 rounded p-2 w-full"
+            required
+          >
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
+            <!-- Extend with more languages if needed -->
+          </select>
+
+          <textarea
+            name="submission"
+            rows="5"
+            class="w-full border border-gray-300 rounded p-2"
+            placeholder="Write your solution here..."
+            required
+            aria-label="Solution Code"
+          ></textarea>
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-2"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+    <%- include('./footer') %>
+  </body>
+</html>

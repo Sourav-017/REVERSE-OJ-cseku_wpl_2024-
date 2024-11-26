@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contest Management</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-6">
+      <h1 class="text-3xl font-bold mb-6">Contest Management</h1>
+
+      <!-- Link to Create a New Contest -->
+      <a
+        href="/admin/contests/new"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 inline-block"
+        >Create New Contest</a
+      >
+
+      <!-- Contest List -->
+      <table
+        class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md"
+      >
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b text-left">Contest Name</th>
+            <th class="py-2 px-4 border-b text-left">Status</th>
+            <th class="py-2 px-4 border-b text-left">Start Time</th>
+            <th class="py-2 px-4 border-b text-left">End Time</th>
+            <th class="py-2 px-4 border-b text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% contests.forEach(function(contest) { %>
+          <tr>
+            <td class="py-2 px-4 border-b"><%= contest.name %></td>
+            <td class="py-2 px-4 border-b"><%= contest.status %></td>
+            <td class="py-2 px-4 border-b"><%= contest.start_time %></td>
+            <td class="py-2 px-4 border-b"><%= contest.end_time %></td>
+            <td class="py-2 px-4 border-b">
+              <!-- Link to Edit the Contest -->
+              <a
+                href="/admin/contests/<%= contest.id %>/edit"
+                class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                >Edit</a
+              >
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -10,8 +10,9 @@
       rel="stylesheet"
     />
   </head>
-  <body class="bg-red-100 font-sans leading-normal tracking-normal">
-    <!-- Include Dashboard (Navbar) -->
+  <body
+    class="bg-red-100 font-sans leading-normal tracking-normal flex flex-col min-h-screen"
+  >
     <%- include('./dashboard') %>
 
     <!-- Hero Section -->
@@ -24,62 +25,44 @@
     </header>
 
     <main class="container mx-auto mt-10 p-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- contest section-->
-        <section>
-          <h2 class="text-2xl font-bold mb-4">Upcoming Contests</h2>
-          <div class="bg-white shadow-md rounded-lg p-6">
-            <ul>
-              <li class="border-b py-3">
-                <a href="/contests/1" class="text-red-600 hover:underline"
-                  >Contest #1: Beginners Challenge</a
-                >
-                <span class="text-gray-600 block"
-                  >Starts: October 20, 2024 - 10:00 AM UTC</span
-                >
-              </li>
-              <li class="border-b py-3">
-                <a href="/contests/2" class="text-red-600 hover:underline"
-                  >Contest #2: Advanced Algorithms</a
-                >
-                <span class="text-gray-600 block"
-                  >Starts: November 5, 2024 - 2:00 PM UTC</span
-                >
-              </li>
-            </ul>
-            <a href="/contests" class="block text-red-600 mt-4 hover:underline"
-              >View All Contests</a
-            >
-          </div>
-        </section>
-
-        <!--  Blog -->
-        <section>
-          <h2 class="text-2xl font-bold mb-4">Latest Blogs</h2>
-          <div class="bg-white shadow-md rounded-lg p-6">
-            <ul>
-              <li class="border-b py-3">
-                <a href="/blogs/1" class="text-red-600 hover:underline"
-                  >How to Solve Dynamic Programming Problems</a
-                >
-                <span class="text-gray-600 block"
-                  >Posted: October 12, 2024</span
-                >
-              </li>
-              <li class="border-b py-3">
-                <a href="/blogs/2" class="text-red-600 hover:underline"
-                  >Tips for Competitive Programming Beginners</a
-                >
-                <span class="text-gray-600 block"
-                  >Posted: October 10, 2024</span
-                >
-              </li>
-            </ul>
-            <a href="/blogs" class="block text-red-600 mt-4 hover:underline"
-              >View All Blogs</a
-            >
-          </div>
-        </section>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+          <img
+            src="/images/mlogo.png"
+            alt="Solve Problems"
+            class="h-16 mx-auto mb-4"
+          />
+          <h2 class="text-xl font-bold text-gray-800">Solve Problems</h2>
+          <p class="text-gray-600 mt-2">Solve algorithmic challenges.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+          <img
+            src="/images/mlogo.png"
+            alt="Host Contests"
+            class="h-16 mx-auto mb-4"
+          />
+          <h2 class="text-xl font-bold text-gray-800">Host Contests</h2>
+          <p class="text-gray-600 mt-2">
+            Participate in contests arranged by ReverseOj And host contests
+            without any fee(*) on ReverseOJ.
+          </p>
+        </div>
+        <!-- Card 3 -->
+        <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+          <img
+            src="/images/mlogo.png"
+            alt="Improve Skills"
+            class="h-16 mx-auto mb-4"
+          />
+          <h2 class="text-xl font-bold text-gray-800">
+            Become Better Programmer
+          </h2>
+          <p class="text-gray-600 mt-2">
+            Learn new techniques to enhance your programming skills.
+          </p>
+        </div>
       </div>
     </main>
 

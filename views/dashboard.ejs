@@ -1,5 +1,4 @@
-<!-- views/partials/dashboard.ejs -->
-<nav class="p-4 bg-white shadow-md">
+<nav class="sticky top-0 z-50 p-4 bg-white shadow-md">
   <div class="container mx-auto flex justify-between items-center">
     <div class="flex items-center">
       <!-- Logo -->
@@ -13,13 +12,29 @@
     </div>
     <div>
       <a href="/problems" class="text-red-600 mx-4 hover:underline">Problems</a>
+      <a href="/contests" class="text-red-600 mx-4 hover:underline">Contests</a>
       <a href="/blogs" class="text-red-600 mx-4 hover:underline">Blogs</a>
-      <a href="/login" class="text-red-600 mx-4 hover:underline">Login</a>
+      <!-- Check if the user is logged in -->
+      <% if (session.user) { %>
+      <!-- If logged in, show the username and a logout link -->
+      <span class="text-blue-600 mx-4"
+        >Hello,
+        <a href="/profile/<%= session.user.id %>" class="hover:underline">
+          <%= session.user.username %>
+        </a></span
+      >
+      <a href="/auth/login" class="text-yellow-600 mx-4 hover:underline"
+        >Logout</a
+      >
+      <% } else { %>
+      <!-- If not logged in, show Login and Sign Up links -->
+      <a href="/auth/login" class="text-red-600 mx-4 hover:underline">Login</a>
       <a
-        href="/register"
+        href="/auth/signup"
         class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >Sign Up</a
       >
+      <% } %>
     </div>
   </div>
 </nav>

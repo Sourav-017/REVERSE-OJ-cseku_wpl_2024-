@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= post.title %> - Reverse OJ</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-red-100 font-sans leading-normal tracking-normal">
+    <!-- Header -->
+    <%- include('./dashboard') %>
+    <header class="bg-red-600 text-white p-16 text-center">
+      <h1 class="text-5xl font-bold"><%= post.title %></h1>
+      <p class="mt-4 text-lg">
+        By <%= post.created_by %> on <%= new
+        Date(post.created_at).toLocaleString() %>
+      </p>
+    </header>
+
+    <!-- Blog Content -->
+    <main class="container mx-auto mt-10 p-4">
+      <section class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h2 class="text-3xl font-bold text-red-600 mb-4">
+          Subtitle: <%= post.subtitle || 'No subtitle provided' %>
+        </h2>
+        <div class="mb-4">
+          <!-- Render content with newlines preserved -->
+          <div class="text-lg text-gray-700 whitespace-pre-wrap">
+            <%= post.content %>
+          </div>
+        </div>
+
+        <!-- Display any file or resource if available -->
+        <% if (post.file) { %>
+        <div class="mt-4">
+          <a
+            href="/uploads/<%= post.file %>"
+            class="bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+            >Download File</a
+          >
+        </div>
+        <% } %>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-4">
+      <p>&copy; 2024 Reverse OJ. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

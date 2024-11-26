@@ -4,35 +4,32 @@ const router = express.Router();
 
 // Render login page
 router.get("/", (req, res) => {
-  res.render("login");
+  res.render("admin_login");
 });
 
 // Handle login form submission
 router.post("/", (req, res) => {
   const { username, password } = req.body;
+  console.log({ username, password });
+  // Query to authenticate the admin
+  const query = "SELECT * FROM admins WHERE username = ? AND password = ?";
 
-  // Example: Replace this with your actual authentication logic
-  //   db
-  //     .query
-  // "SELECT * FROM admins WHERE username = ? AND password = ?",
-  // [username, password],
-  // (err, results) => {
-  //   if (err) {
-  //     console.error("Database error:", err);
-  //     return res.status(500).send("Database error.");
-  //   }
+  db.query(query, [username, password], (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).send("Database error.");
+    }
 
-  //   if (results.length > 0) {
-  //     // Authentication successful
-
-  // res.redirect("/admin/dashboard");
-  //   } else {
-  //     // Authentication failed
-  //     res.status(401).send("Invalid username or password.");
-  //   }
-  // }
-  req.session.isAdmin = true;
-  res.redirect("/admin");
+    if (results.length > 0) {
+      // If admin is authenticated, save session info
+      req.session.isAdmin = true;
+      req.session.adminUser = results[0]; // Save admin info if needed
+      res.redirect("/admin"); // Redirect to admin dashboard
+    } else {
+      // Authentication failed
+      res.status(401).send("Invalid username or password.");
+    }
+  });
 });
 
 // Handle logout

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= contest.name %> Details</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Link to Tailwind CSS -->
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <%- include('./dashboard') %>
+    <div class="container mx-auto p-6">
+      <h1 class="text-3xl font-bold mb-4"><%= contest.name %> Details</h1>
+      <p class="mb-2"><strong>Status:</strong> <%= contest.status %></p>
+      <p class="mb-2"><strong>Start Time:</strong> <%= contest.start_time %></p>
+      <p class="mb-6"><strong>End Time:</strong> <%= contest.end_time %></p>
+
+      <!-- Timer Display -->
+      <p id="timer" class="text-xl font-bold text-blue-600 mb-6"></p>
+
+      <h2 class="text-2xl font-semibold mb-4">Problems</h2>
+
+      <!-- Beautiful Table using Tailwind CSS -->
+      <div class="overflow-x-auto">
+        <table
+          class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md"
+        >
+          <thead>
+            <tr class="bg-gray-100 text-gray-600">
+              <th class="px-6 py-3 text-left text-sm font-medium">
+                Problem Name
+              </th>
+              <th class="px-6 py-3 text-left text-sm font-medium">Order</th>
+              <th class="px-6 py-3 text-left text-sm font-medium">Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (problems && problems.length > 0) { %> <%
+            problems.forEach(function(problem) { %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-3 text-sm font-medium"><%= problem.name %></td>
+              <td class="px-6 py-3 text-sm font-medium">
+                <%= problem.problem_order %>
+              </td>
+              <td class="px-6 py-3 text-sm font-medium">
+                <a
+                  href="/contests/<%= contest.id %>/problems/<%= problem.id %>"
+                  class="text-blue-500 hover:underline"
+                  >View Problem</a
+                >
+              </td>
+            </tr>
+            <% }); %> <% } else { %>
+            <tr>
+              <td
+                colspan="3"
+                class="px-6 py-3 text-center text-sm text-gray-600"
+              >
+                No problems found for this contest.
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- View Standings Button -->
+      <a
+        href="/contests/contestSubmission/<%= contest.id %>/standings"
+        class="inline-block mt-4 bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600"
+      >
+        View Standings
+      </a>
+
+      <a
+        href="/contests"
+        class="inline-block mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        >Back to Contests</a
+      >
+    </div>
+
+    <!-- Hidden Fields to Pass Dates to JavaScript -->
+    <input type="hidden" id="start_time" value="<%= contest.start_time %>" />
+    <input type="hidden" id="end_time" value="<%= contest.end_time %>" />
+
+    <!-- JavaScript for Countdown Timer -->
+    <script>
+      function updateTimer() {
+        const startTime = new Date(document.getElementById("start_time").value);
+        const endTime = new Date(document.getElementById("end_time").value);
+        const now = new Date();
+
+        let timeRemaining, status;
+
+        if (now < startTime) {
+          timeRemaining = startTime - now;
+          status = "Contest starts in:";
+        } else if (now >= startTime && now <= endTime) {
+          timeRemaining = endTime - now;
+          status = "Time remaining:";
+        } else {
+          document.getElementById("timer").textContent = "Contest has ended.";
+          return;
+        }
+
+        const seconds = Math.floor((timeRemaining / 1000) % 60);
+        const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
+        const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+
+        document.getElementById(
+          "timer"
+        ).textContent = `${status} ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+
+      setInterval(updateTimer, 1000); // Update timer every second
+    </script>
+  </body>
+</html>

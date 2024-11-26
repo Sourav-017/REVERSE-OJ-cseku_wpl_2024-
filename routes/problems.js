@@ -3,6 +3,7 @@ const db = require("../db");
 const { exec } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+// const session = require("express-session");
 
 const router = express.Router();
 
@@ -15,12 +16,17 @@ if (!fs.existsSync(tempDir)) {
 
 //  list  problems
 router.get("/", (req, res) => {
+  console.log(req.session);
   db.query("SELECT * FROM problems", (err, results) => {
     if (err) {
       console.error("Error fetching problems:", err);
       return res.status(500).send("Database error.");
     }
-    res.render("ProblemList.ejs", { problems: results });
+    console.log(req.session);
+    res.render("ProblemList", {
+      problems: results,
+      session: req.session,
+    });
   });
 });
 
@@ -42,7 +48,11 @@ router.get("/problem/:id", (req, res) => {
       const problem = results[0];
       const pdfBuffer = problem.problemStatementPDF;
 
-      res.render("ProblemStatement.ejs", { problem, pdfBuffer });
+      res.render("ProblemStatement.ejs", {
+        problem,
+        pdfBuffer,
+        session: req.session,
+      });
     }
   );
 });
@@ -51,7 +61,6 @@ router.post("/submit", (req, res) => {
   const { language, submission } = req.body;
   const problemId = req.query.id;
   console.log(req.body);
-  //
 
   const inputFilePath = path.join(tempDir, `input_${problemId}.txt`);
   const expectedOutputPath = path.join(tempDir, `output_${problemId}.txt`);
@@ -68,11 +77,14 @@ router.post("/submit", (req, res) => {
       return res.status(500).send("Failed to save submission.");
     }
 
-    const command =
-      language === "python"
-        ? `python3 ${submissionFilePath} < ${inputFilePath} > ${userOutputPath}`
-        : `g++ ${submissionFilePath} -o ${tempDir}/submission && ${tempDir}/submission < ${inputFilePath} > ${userOutputPath}`;
-    // execute in bash
+    let command;
+    if (language === "python") {
+      command = `python3 ${submissionFilePath} < ${inputFilePath} > ${userOutputPath}`;
+    } else if (language === "cpp") {
+      command = `g++ ${submissionFilePath} -o ${tempDir}/submission && ${tempDir}/submission < ${inputFilePath} > ${userOutputPath}`;
+    } else {
+      command = `gcc ${submissionFilePath} -o ${tempDir}/submission && ${tempDir}/submission < ${inputFilePath} > ${userOutputPath}`;
+    }
 
     exec(command, { timeout: 2000 }, async (error, stdout, stderr) => {
       if (error) {
@@ -85,7 +97,7 @@ router.post("/submit", (req, res) => {
             .send("<h1 align='center'>Time Limit Exceed</h1>");
         }
         console.error("Execution error:", stderr);
-        const message = stderr || "Compilation Error";
+        const message = "Compilation Error";
         cleanUp([submissionFilePath, userOutputPath]);
         return res.status(400).send(`<h1 align='center'>${message}</h1>`);
       }

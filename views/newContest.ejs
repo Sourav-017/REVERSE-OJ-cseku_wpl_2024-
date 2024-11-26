@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Contest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-lg">
+      <h1 class="text-2xl font-bold mb-6 text-center">Create a New Contest</h1>
+      <form action="/admin/contests/new" method="POST">
+        <div class="mb-4">
+          <label
+            for="contest_name"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Contest Name</label
+          >
+          <input
+            type="text"
+            id="contest_name"
+            name="contest_name"
+            class="block w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="status"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Status</label
+          >
+          <select
+            id="status"
+            name="status"
+            class="block w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            required
+          >
+            <option value="upcoming">Upcoming</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="start_time"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Start Time</label
+          >
+          <input
+            type="datetime-local"
+            id="start_time"
+            name="start_time"
+            class="block w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="end_time"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >End Time</label
+          >
+          <input
+            type="datetime-local"
+            id="end_time"
+            name="end_time"
+            class="block w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="problems"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Problems</label
+          >
+          <select
+            id="problems"
+            name="problems"
+            class="block w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+            multiple
+          >
+            <!-- Dynamically generate problem options -->
+            <% problems.forEach(problem => { %>
+            <option value="<%= problem.id %>"><%= problem.name %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          Create Contest
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

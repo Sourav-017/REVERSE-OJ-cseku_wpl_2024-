@@ -15,34 +15,18 @@ router.post("/", (req, res) => {
   const inputFile = req.files["inputFile"][0];
   const outputFile = req.files["outputFile"][0];
 
-  //  file uploaded
-
+  // Check if all required files are uploaded
   if (!problemStatement || !inputFile || !outputFile) {
     return res.status(400).send("Please upload all required files.");
   }
 
   const problemStatementData = fs.readFileSync(problemStatement.path);
-  
-  const inputDir = path.join(__dirname, "../files/Input/");
-  const outputDir = path.join(__dirname, "../files/Output/");
 
-  // Ensure directories exist
-  // fs.mkdirSync(inputDir, { recursive: true });
-  // fs.mkdirSync(outputDir, { recursive: true });
-
-  const inputFilePath = path.join(inputDir, inputFile.originalname);
-  const outputFilePath = path.join(outputDir, outputFile.originalname);
-  console.log(inputFilePath);
-  // Save the input and output files to their respective directories
-  fs.renameSync(inputFile.path, inputFilePath);
-  fs.renameSync(outputFile.path, outputFilePath);
-
+  // Insert problem into the database and get the problem ID
   const query = "INSERT INTO problems SET ?";
   const values = {
     name: problemName,
     problemStatementPDF: problemStatementData,
-    // inputFilePath: inputFilePath, 
-    // outputFilePath: outputFilePath, 
   };
 
   db.query(query, values, (err, result) => {
@@ -51,6 +35,21 @@ router.post("/", (req, res) => {
       return res.status(500).send("Database error.");
     }
 
+    const problemId = result.insertId; // Get the auto-generated problem ID
+
+    // Define file paths with problem ID
+    const tmpDir = path.join(__dirname, "../temp/");
+    const inputFilePath = path.join(tmpDir, `input_${problemId}.txt`);
+    const outputFilePath = path.join(tmpDir, `output_${problemId}.txt`);
+
+    // Ensure the tmp directory exists
+    fs.mkdirSync(tmpDir, { recursive: true });
+
+    // Move the input and output files to their respective paths
+    fs.renameSync(inputFile.path, inputFilePath);
+    fs.renameSync(outputFile.path, outputFilePath);
+
+    // Respond with success
     res.status(200).send("Problem and files uploaded successfully.");
   });
 });
