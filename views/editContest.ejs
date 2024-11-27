@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Contest</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Edit Contest</h1>
+    <form action="/admin/contests/<%= contest.id %>/edit" method="POST" class="bg-white p-4 rounded-lg shadow-md mb-8">
+      
+      <!-- Contest Name -->
+      <div class="mb-4">
+        <label for="contest_name" class="block text-sm font-medium text-gray-700">Contest Name</label>
+        <input type="text" id="contest_name" name="contest_name" value="<%= contest.name %>" required class="w-full px-3 py-2 border rounded-lg" placeholder="Enter contest name">
+      </div>
+
+      <!-- Contest Status -->
+      <div class="mb-4">
+        <label for="status" class="block text-sm font-medium text-gray-700">Contest Status</label>
+        <select id="status" name="status" class="w-full px-3 py-2 border rounded-lg" required>
+          <option value="active" <%= contest.status === 'active' ? 'selected' : '' %>>Active</option>
+          <option value="upcoming" <%= contest.status === 'upcoming' ? 'selected' : '' %>>Upcoming</option>
+          <option value="ended" <%= contest.status === 'ended' ? 'selected' : '' %>>Ended</option>
+        </select>
+      </div>
+
+      <!-- Start Time -->
+      <div class="mb-4">
+        <label for="start_time" class="block text-sm font-medium text-gray-700">Start Time</label>
+        <input type="datetime-local" id="start_time" name="start_time" value="<%= contest.start_time %>" required class="w-full px-3 py-2 border rounded-lg">
+      </div>
+
+      <!-- End Time -->
+      <div class="mb-4">
+        <label for="end_time" class="block text-sm font-medium text-gray-700">End Time</label>
+        <input type="datetime-local" id="end_time" name="end_time" value="<%= contest.end_time %>" required class="w-full px-3 py-2 border rounded-lg">
+      </div>
+
+      <!-- Select Problems -->
+      <div class="mb-4">
+        <label for="problems" class="block text-sm font-medium text-gray-700">Select Problems</label>
+        <select id="problems" name="problems[]" multiple class="w-full px-3 py-2 border rounded-lg">
+          <% problems.forEach(function(problem) { %>
+            <option value="<%= problem.id %>" <%= assignedProblemIds.includes(problem.id) ? 'selected' : '' %>>
+              <%= problem.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update Contest</button>
+    </form>
+
+    <!-- Table to display standings -->
+    <div class="mt-8">
+      <% if (typeof standings !== 'undefined' && standings.length > 0) { %>
+        <table class="min-w-full table-auto mt-6">
+          <thead>
+            <tr>
+              <th class="px-4 py-2">Rank</th>
+              <th class="px-4 py-2">Username</th>
+              <th class="px-4 py-2">Unique Problems Solved</th>
+              <th class="px-4 py-2">Total Execution Time</th>
+              <th class="px-4 py-2">Total Submissions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% standings.forEach(function(stand, index) { %>
+              <tr>
+                <td class="px-4 py-2"><%= index + 1 %></td>
+                <td class="px-4 py-2"><%= stand.user_name %></td>
+                <td class="px-4 py-2"><%= stand.unique_problems_solved %></td>
+                <td class="px-4 py-2"><%= stand.total_execution_time %></td>
+                <td class="px-4 py-2"><%= stand.total_submissions %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p class="mt-4 text-gray-600">No standings available.</p>
+      <% } %>
+    </div>
+
+  </div>
+</body>
+</html>
