@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const moment = require("moment"); 
+const moment = require("moment");
 // Fetch the list of contests
 router.get("/", (req, res) => {
   const userId = req.session.user.id;
@@ -13,14 +13,14 @@ router.get("/", (req, res) => {
   }
 
   // Fetch all contests
-  db.execute("SELECT * FROM contests", (error, contests) => {
+  db.execute("SELECT * FROM contests ORDER BY id DESC", (error, contests) => {
     if (error) {
       return res.status(500).send("An error occurred while fetching contests.");
     }
 
     // Fetch contests the user is registered for
     db.execute(
-      "SELECT contest_id FROM contest_participants WHERE user_id = ?",
+      "SELECT contest_id FROM contest_participants WHERE user_id = ? ORDER BY contest_id DESC",
       [userId],
       (error, registered) => {
         if (error) {
@@ -31,7 +31,7 @@ router.get("/", (req, res) => {
 
         // Create an array of contest IDs the user is registered for
         const registeredContests = registered.map((row) => row.contest_id);
-
+        console.log(registeredContests);
         // Render contests with registration data
         res.render("contestList", {
           contests,

@@ -19,56 +19,56 @@
         <% contests.forEach(contest => { %>
         <li class="bg-white shadow-md rounded-lg p-6">
           <h2 class="text-2xl font-semibold text-blue-600">
-            <a href="/contests/<%= contest.id %>" class="hover:underline"
-              ><%= contest.name %></a
-            >
+            <a href="/contests/<%= contest.id %>" class="hover:underline">
+              <%= contest.name %>
+            </a>
           </h2>
 
-          <% 
-            // Get current time and convert start_time, end_time to Date objects
-            const now = new Date();
-            const startTime = new Date(contest.start_time);
-            const endTime = new Date(contest.end_time);
-            let status = 'Ended'; // Default to ended
-
-            // Determine the status based on the current time
-            if (now < startTime) {
-              status = 'Upcoming'; // Contest hasn't started yet
-            } else if (now >= startTime && now <= endTime) {
-              status = 'Ongoing'; // Contest is currently running
-            }
-          %>
-
           <p class="text-sm text-gray-500 mt-2">
-            <strong>Status:</strong> <%= status %>
+            <strong>Status:</strong> <%= contest.status %>
           </p>
           <p class="text-sm text-gray-500">
-            <strong>Start Time:</strong> <%= contest.start_time %>
+            <strong>Start Time:</strong> <%= new
+            Date(contest.start_time).toLocaleString() %>
           </p>
           <p class="text-sm text-gray-500">
-            <strong>End Time:</strong> <%= contest.end_time %>
+            <strong>End Time:</strong> <%= new
+            Date(contest.end_time).toLocaleString() %>
           </p>
 
           <!-- Registration Button -->
-          <% if (status !== 'Ongoing' && status !== 'Ended') { %>
-            <% if (registeredContests.includes(contest.id)) { %>
+          <% if (contest.status === 'upcoming') { %> <% if
+          (registeredContests.includes(contest.id)) { %>
+          <button
+            class="bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 cursor-not-allowed"
+            disabled
+          >
+            Registered
+          </button>
+          <% } else { %>
+          <form action="/contests/register" method="POST" class="mt-4">
+            <input type="hidden" name="contestId" value="<%= contest.id %>" />
             <button
-              class="bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 cursor-not-allowed"
-              disabled
+              type="submit"
+              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Registered
+              Register
             </button>
-            <% } else { %>
-            <form action="/contests/register" method="POST" class="mt-4">
-              <input type="hidden" name="contestId" value="<%= contest.id %>" />
-              <button
-                type="submit"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Register
-              </button>
-            </form>
-            <% } %>
+          </form>
+          <% } %> <% } else if (contest.status === 'active') { %>
+          <button
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 cursor-not-allowed"
+            disabled
+          >
+            Contest Ongoing
+          </button>
+          <% } else { %>
+          <button
+            class="bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 cursor-not-allowed"
+            disabled
+          >
+            Contest Ended
+          </button>
           <% } %>
         </li>
         <% }); %>

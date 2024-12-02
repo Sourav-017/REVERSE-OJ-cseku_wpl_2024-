@@ -17,7 +17,8 @@ if (!fs.existsSync(tempDir)) {
 //  list  problems
 router.get("/", (req, res) => {
   console.log(req.session);
-  db.query("SELECT * FROM problems", (err, results) => {
+
+  db.query("SELECT * FROM problems where Status = '1'", (err, results) => {
     if (err) {
       console.error("Error fetching problems:", err);
       return res.status(500).send("Database error.");

@@ -7,83 +7,90 @@ const db = require("../db"); // Assuming db setup is in a separate module
 
 // Temporary directory to store files
 const tempDir = path.join(__dirname, "../temp");
+
 router.get("/:contest_id/standings", async (req, res) => {
   const contestId = req.params.contest_id;
 
   const query = `
     SELECT 
-        u.id AS user_id, 
+        cp.user_id,
         u.name AS user_name,
-        COUNT(DISTINCT s.problem_id) AS unique_problems_solved,
-        COUNT(s.problem_id) AS total_submissions
+        COALESCE(COUNT(DISTINCT s.problem_id), 0) AS unique_problems_solved,
+        COALESCE(SUM(s.status = 'AC'), 0) AS score,
+        COALESCE(COUNT(s.problem_id), 0) AS total_submissions,
+        GROUP_CONCAT(p.name ORDER BY p.name SEPARATOR ', ') AS solved_problems
     FROM 
-        submissions s
-    JOIN 
-        user u ON s.user_id = u.id
+        contest_participants cp
+    LEFT JOIN 
+        user u ON cp.user_id = u.id
+    LEFT JOIN 
+        submissions s ON cp.user_id = s.user_id AND s.contest_id = ? AND s.status = 'AC'
+    LEFT JOIN 
+        problems p ON s.problem_id = p.id
     WHERE 
-        s.contest_id = ? AND s.status = 'AC'
+        cp.contest_id = ?
     GROUP BY 
-        u.id
+        cp.user_id
     ORDER BY 
-        unique_problems_solved DESC
+        unique_problems_solved DESC, 
+        score DESC, 
+        u.name
   `;
 
   // Execute the query to get standings
-  db.query(query, [contestId], (err, results) => {
+  db.query(query, [contestId, contestId], (err, results) => {
     if (err) {
       console.error("Error fetching standings:", err);
       return res.status(500).send("Internal Server Error");
     }
 
-    // Check if results is an array and has data
     if (!Array.isArray(results) || results.length === 0) {
       return res.status(404).send("No standings found for this contest.");
     }
 
-    // Pass contest details and standings to the view
+    // Render standings with contest and participant data
     res.render("contest_standings", {
-      contest: { id: contestId, name: "" }, // Replace with actual contest data
+      contest: { id: contestId, name: "" }, // Replace with actual contest data if available
       standings: results,
     });
   });
 });
 
-router.post("/:contest_id/problems/:problem_id/submit", (req, res) => {
-  const contestId = req.params.contest_id;
-  const problemId = req.params.problem_id;
-  const userId = req.session.user.id; // Assuming user is authenticated
+// Submission queue
 
-  // Check if user is logged in
-  if (!userId) {
-    return res.status(403).send("You must be logged in to submit a solution.");
-  }
+// Queue to hold submission requests
+const submissionQueue = [];
+let isProcessing = false;
 
-  const { language, submission } = req.body;
-  console.log("Submission Data:", req.body);
+// Function to process a single submission
+async function processSubmission(submissionData) {
+  const { contestId, problemId, userId, language, submissionCode, res } =
+    submissionData;
 
-  // Get paths for input and expected output files
-  const inputFilePath = path.join(tempDir, `input_${problemId}.txt`);
-  const expectedOutputPath = path.join(tempDir, `output_${problemId}.txt`);
-  const userOutputPath = path.join(tempDir, "user_output.txt");
+  try {
+    // Ensure temp directory exists
+    await fs.promises.mkdir(tempDir, { recursive: true });
 
-  const fileExtension = language === "python" ? "py" : "cpp";
-  const submissionFilePath = path.join(tempDir, `submission.${fileExtension}`);
+    const fileExtension = language === "python" ? "py" : "cpp";
+    const submissionFilePath = path.join(
+      tempDir,
+      `submission_${userId}.${fileExtension}`
+    );
+    const inputFilePath = path.join(tempDir, `input_${problemId}.txt`);
+    const expectedOutputPath = path.join(tempDir, `output_${problemId}.txt`);
+    const userOutputPath = path.join(tempDir, `user_output_${userId}.txt`);
 
-  // Save the submission code to a temporary file
-  fs.writeFile(submissionFilePath, submission, (err) => {
-    if (err) {
-      console.error("Error writing submission file:", err);
-      return res.status(500).send("Failed to save submission.");
-    }
+    // Save the submission code to a temporary file
+    await fs.promises.writeFile(submissionFilePath, submissionCode);
 
-    // Determine the command based on the language
+    // Prepare the command based on the language
     let command;
     if (language === "python") {
-      command = `python3 ${submissionFilePath} < ${inputFilePath} > ${userOutputPath}`;
+      command = `timeout 3s python3 ${submissionFilePath} < ${inputFilePath} > ${userOutputPath}`;
     } else if (language === "cpp") {
-      command = `g++ ${submissionFilePath} -o ${tempDir}/submission && ${tempDir}/submission < ${inputFilePath} > ${userOutputPath}`;
+      command = `g++ ${submissionFilePath} -o ${tempDir}/submission_${userId} && timeout 3s ${tempDir}/submission_${userId} < ${inputFilePath} > ${userOutputPath}`;
     } else {
-      command = `gcc ${submissionFilePath} -o ${tempDir}/submission && ${tempDir}/submission < ${inputFilePath} > ${userOutputPath}`;
+      throw new Error("Unsupported language");
     }
 
     // Execute the command to run the submission
@@ -93,22 +100,25 @@ router.post("/:contest_id/problems/:problem_id/submit", (req, res) => {
 
       if (error) {
         if (error.killed) {
-          // Execution time limit exceeded
           console.error("Execution time limit exceeded.");
           statusMessage = "Time Limit Exceeded";
           statusCode = "TLE";
-          cleanUp([submissionFilePath, userOutputPath]);
-          return res
-            .status(400)
-            .send("<h1 align='center'>Time Limit Exceeded</h1>");
+        } else {
+          console.error("Execution error:", stderr);
+          statusMessage = "Runtime Error";
+          statusCode = "RTE";
         }
-        console.error("Execution error:", stderr);
-        statusMessage = "Compilation Error";
-        statusCode = "CE";
-        cleanUp([submissionFilePath, userOutputPath]);
-        return res
-          .status(400)
-          .send("<h1 align='center'>Compilation Error</h1>");
+
+        // Save the TLE or RTE result in the database
+        await saveSubmissionResult(
+          contestId,
+          problemId,
+          userId,
+          statusCode,
+          res,
+          `<h1 align='center'>${statusMessage}</h1>`
+        );
+        return;
       }
 
       try {
@@ -119,54 +129,104 @@ router.post("/:contest_id/problems/:problem_id/submit", (req, res) => {
           await fs.promises.readFile(expectedOutputPath, "utf-8")
         ).trim();
 
-        // Check if the output matches
         if (userOutput === expectedOutput) {
           statusMessage = "Accepted";
           statusCode = "AC";
-          // Save the submission in the database with status as "Accepted"
-          db.execute(
-            `
-              INSERT INTO submissions (contest_id, problem_id, user_id, status, created_at)
-              VALUES (?, ?, ?, ?, NOW())
-            `,
-            [contestId, problemId, userId, statusCode],
-            (error) => {
-              if (error) {
-                console.error("Error saving submission:", error);
-                return res.status(500).send("Failed to submit solution");
-              }
-
-              res.send("<h1 align='center'>Accepted</h1>");
-            }
-          );
         } else {
           statusMessage = "Wrong Answer";
           statusCode = "WA";
-          // Save the submission in the database with status as "Wrong Answer"
-          db.execute(
-            `
-              INSERT INTO submissions (contest_id, problem_id, user_id, status, created_at)
-              VALUES (?, ?, ?, ?, NOW())
-            `,
-            [contestId, problemId, userId, statusCode],
-            (error) => {
-              if (error) {
-                console.error("Error saving submission:", error);
-                return res.status(500).send("Failed to submit solution");
-              }
-
-              res.send("<h1 align='center'>Wrong Answer</h1>");
-            }
-          );
         }
+
+        // Save the submission result in the database
+        await saveSubmissionResult(
+          contestId,
+          problemId,
+          userId,
+          statusCode,
+          res,
+          `<h1 align='center'>${statusMessage}</h1>`
+        );
       } catch (fileError) {
         console.error("Error reading output files:", fileError);
         res.status(500).send("<h1 align='center'>Internal Server Error</h1>");
       } finally {
-        cleanUp([submissionFilePath, userOutputPath]);
+        // Clean up temporary files
+        await Promise.all([
+          fs.promises.unlink(submissionFilePath),
+          fs.promises.unlink(userOutputPath).catch(() => {}),
+        ]);
       }
     });
+  } catch (err) {
+    console.error("Error processing submission:", err);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+// Function to save submission results in the database
+async function saveSubmissionResult(
+  contestId,
+  problemId,
+  userId,
+  statusCode,
+  res,
+  responseMessage
+) {
+  try {
+    await db.execute(
+      `
+      INSERT INTO submissions (contest_id, problem_id, user_id, status, created_at)
+      VALUES (?, ?, ?, ?, NOW())
+    `,
+      [contestId, problemId, userId, statusCode]
+    );
+    res.send(responseMessage);
+  } catch (error) {
+    console.error("Error saving submission:", error);
+    res
+      .status(500)
+      .send("<h1 align='center'>Failed to save submission result</h1>");
+  }
+}
+
+// Function to process the queue
+async function processQueue() {
+  if (isProcessing || submissionQueue.length === 0) {
+    return;
+  }
+
+  isProcessing = true;
+
+  const currentSubmission = submissionQueue.shift();
+  await processSubmission(currentSubmission);
+
+  isProcessing = false;
+  processQueue(); // Process the next submission
+}
+
+// Endpoint for submitting a solution
+router.post("/:contest_id/problems/:problem_id/submit", (req, res) => {
+  const contestId = req.params.contest_id;
+  const problemId = req.params.problem_id;
+  const userId = req.session.user.id; // Assuming user is authenticated
+
+  if (!userId) {
+    return res.status(403).send("You must be logged in to submit a solution.");
+  }
+
+  const { language, submission } = req.body;
+
+  // Add the submission to the queue
+  submissionQueue.push({
+    contestId,
+    problemId,
+    userId,
+    language,
+    submissionCode: submission,
+    res,
   });
+
+  processQueue(); // Trigger queue processing
 });
 
 function cleanUp(files) {

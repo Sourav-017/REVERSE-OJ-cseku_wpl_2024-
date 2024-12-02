@@ -11,7 +11,7 @@
   </head>
   <body class="bg-gray-100 text-gray-800">
     <div class="container mx-auto p-6">
-      <h1 class="text-3xl font-bold mb-4">Standings <%= contest.name %></h1>
+      <h1 class="text-3xl font-bold mb-4">Standings - <%= contest.name %></h1>
 
       <div class="overflow-x-auto">
         <table
@@ -23,6 +23,9 @@
               <th class="px-6 py-3 text-left text-sm font-medium">
                 Problems Solved
               </th>
+              <th class="px-6 py-3 text-left text-sm font-medium">
+                Solved Problems
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -33,6 +36,19 @@
               </td>
               <td class="px-6 py-3 text-sm font-medium">
                 <%= standing.unique_problems_solved %>
+              </td>
+              <td class="px-6 py-3 text-sm font-medium">
+                <% if (standing.solved_problems) { %>
+                <ul class="list-disc pl-4">
+                  <%
+                  standing.solved_problems.split(',').forEach(function(problem)
+                  { %>
+                  <li><%= problem.trim() %></li>
+                  <% }); %>
+                </ul>
+                <% } else { %>
+                <span class="text-gray-500">No problems solved</span>
+                <% } %>
               </td>
             </tr>
             <% }); %>

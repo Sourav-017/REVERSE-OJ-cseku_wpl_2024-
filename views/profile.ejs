@@ -7,34 +7,72 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-100">
-
+    <%- include('./dashboard') %>
     <!-- Profile Content -->
     <main class="container mx-auto px-4 py-8">
       <div class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
         <h2 class="text-3xl font-bold mb-6">User Profile</h2>
 
-        <!-- User Information -->
-        <div class="mb-4">
-          <label for="username" class="block text-gray-700 font-semibold"
-            >Username:</label
-          >
-          <p id="username" class="text-gray-900"><%= user.Name %></p>
-        </div>
+        <!-- User Information Edit Form -->
+        <form action="/profile/<%= user.id %>" method="POST">
+          <div class="mb-4">
+            <label for="username" class="block text-gray-700 font-semibold"
+              >Username:</label
+            >
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value="<%= user.Name %>"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <div class="mb-4">
-          <label for="email" class="block text-gray-700 font-semibold"
-            >Email:</label
-          >
-          <p id="email" class="text-gray-900"><%= user.Email %></p>
-        </div>
+          <div class="mb-4">
+            <label for="email" class="block text-gray-700 font-semibold"
+              >Email:</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value="<%= user.Email %>"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <!-- Update Button -->
-        <div class="flex justify-end mt-6">
+          <div class="mb-4">
+            <label for="password" class="block text-gray-700 font-semibold"
+              >Password:</label
+            >
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter new password (leave blank to keep current)"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <div class="flex justify-end mt-6">
+            <button
+              type="submit"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+
+        <!-- Cancel Button (optional) -->
+        <div class="flex justify-end mt-4">
           <a
-            href="/profile/edit"
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >Edit Profile</a
+            href="/profile/<%= user.id %>"
+            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
           >
+            Cancel
+          </a>
         </div>
       </div>
     </main>

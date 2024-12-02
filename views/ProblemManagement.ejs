@@ -39,6 +39,7 @@
                 <%= problem.problemD %>
               </td>
               <td class="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                <!-- Delete Button -->
                 <form
                   action="/admin/delete-problem/<%= problem.id %>"
                   method="POST"
@@ -48,6 +49,18 @@
                     class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
                   >
                     Delete
+                  </button>
+                </form>
+                <!-- Hide/Unhide Button -->
+                <form
+                  action="/admin/<%= problem.Status === 0 ? 'unhide' : 'hide' %>-problem/<%= problem.id %>"
+                  method="POST"
+                >
+                  <button
+                    type="submit"
+                    class="<%= problem.Status === 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' %> text-white px-4 py-1 rounded"
+                  >
+                    <%= problem.Status === 0 ? 'Unhide' : 'Hide' %>
                   </button>
                 </form>
               </td>

@@ -45,6 +45,39 @@ router.post("/delete-user/:id", (req, res) => {
   });
 });
 
+router.post("/hide-problem/:id", (req, res) => {
+  const problemId = req.params.id;
+
+  // Update the problem status in the database
+  const query = "UPDATE problems SET Status = ? WHERE id = ?";
+  db.query(query, [0, problemId], (err, result) => {
+    if (err) {
+      console.error("Error updating problem status:", err);
+      return res.status(500).json({ message: "Failed to hide problem." });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Problem not found." });
+    }
+    res.status(200).json({ message: "Problem hidden successfully." });
+  });
+});
+
+router.post("/unhide-problem/:id", (req, res) => {
+  const problemId = req.params.id;
+
+  // Update the problem status in the database
+  const query = "UPDATE problems SET Status = ? WHERE id = ?";
+  db.query(query, [1, problemId], (err, result) => {
+    if (err) {
+      console.error("Error updating problem status:", err);
+      return res.status(500).json({ message: "Failed to hide problem." });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Problem not found." });
+    }
+    res.status(200).json({ message: "Problem hidden successfully." });
+  });
+});
 // In your login route (e.g., in routes/auth.js)
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -194,11 +227,33 @@ router.get("/contests/:id/edit", (req, res) => {
             const assignedProblemIds = contestProblems.map(
               (cp) => cp.problem_id
             );
-            res.render("editContest", {
-              contest,
-              problems: problemResults,
-              assignedProblemIds,
-            });
+
+            // Get the list of registered users for the contest
+            db.query(
+              `SELECT user.id, user.Name 
+               FROM user 
+               JOIN contest_participants ON user.id = contest_participants.user_id 
+               WHERE contest_participants.contest_id = ?`,
+              [contestId],
+              (err, userResults) => {
+                if (err) {
+                  console.error("Error fetching registered users:", err);
+                  return res.status(500).send("Database error.");
+                }
+
+                // Pass the contest, problems, assigned problems, and registered users to the view
+                // console.log(contest);
+                // console.log(problemResults);
+                // console.log(userResults);
+
+                res.render("editContest", {
+                  contest,
+                  problems: problemResults,
+                  assignedProblemIds,
+                  registeredUsers: userResults,
+                });
+              }
+            );
           }
         );
       });

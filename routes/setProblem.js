@@ -27,6 +27,7 @@ router.post("/", (req, res) => {
   const values = {
     name: problemName,
     problemStatementPDF: problemStatementData,
+    Status: 0,
   };
 
   db.query(query, values, (err, result) => {
